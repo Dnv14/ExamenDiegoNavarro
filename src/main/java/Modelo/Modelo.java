@@ -56,7 +56,7 @@ public class Modelo implements IModelo {
                 break;
             }
         }
-        // notificarObservadores(); 
+        notificarSuscriptores();
     }
 
     @Override
