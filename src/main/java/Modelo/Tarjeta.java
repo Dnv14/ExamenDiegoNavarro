@@ -9,5 +9,21 @@ package Modelo;
  * @author Diego
  */
 public class Tarjeta {
-    
+
+    private String numeroTarjeta;
+    private String cvv;
+
+    public Tarjeta(String numeroTarjeta, String cvv) {
+        this.numeroTarjeta = numeroTarjeta;
+        this.cvv = cvv;
+    }
+
+    public String getNumeroTarjeta() {
+        return numeroTarjeta;
+    }
+
+    public String getCvv() {
+        return cvv;
+    }
+
 }
