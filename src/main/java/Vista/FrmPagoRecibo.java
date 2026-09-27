@@ -5,6 +5,7 @@
 package Vista;
 
 import Control.Control;
+import Modelo.Cliente;
 import Modelo.IModelo;
 
 /**
@@ -27,6 +28,7 @@ public class FrmPagoRecibo extends javax.swing.JFrame implements ISubscriber {
         this.setResizable(false);
         this.setTitle("Pagar Recibo");
         this.setLocationRelativeTo(null);
+        this.update(this.modelo);
 
     }
 
@@ -225,7 +227,17 @@ public class FrmPagoRecibo extends javax.swing.JFrame implements ISubscriber {
     }//GEN-LAST:event_busquedaTextFieldActionPerformed
 
     private void botonPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonPagarActionPerformed
-        // TODO add your handling code here:
+        String numTarjeta = busquedaTextField.getText().trim();
+        String cvv = busquedaTextField1.getText().trim();
+        boolean tarjetaValida = control.validarTarjeta(numTarjeta, cvv);
+
+        if (tarjetaValida) {
+            control.pagarMonto();
+            javax.swing.JOptionPane.showMessageDialog(this, "Pago realizado con exito Recibo saldado.");
+            this.dispose();
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Tarjeta no encontrada o datos incorrectos.", "Error de Pago", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_botonPagarActionPerformed
 
     private void busquedaTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_busquedaTextField1ActionPerformed
@@ -234,7 +246,18 @@ public class FrmPagoRecibo extends javax.swing.JFrame implements ISubscriber {
 
     @Override
     public void update(IModelo modelo) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+
+        Cliente c = modelo.getClienteEncontrado();
+        if (c != null) {
+            labelDomicilio.setText("Domicilio: " + c.getDomicilio());
+            labelNumeroServicio.setText("Número de Servicio: " + c.getNumeroServicio());
+            labelNombreCliente.setText("Nombre del Cliente: " + c.getNombre());
+            labelTotalGasto.setText("kWh Gastados: " + c.getKwhGastados());
+            labelTotalPago.setText("Total a Pagar: " + c.getMontoPago() + "$");
+        } else {
+            labelDomicilio.setText("Domicilio: ");
+            labelNombreCliente.setText("Nombre del Cliente: No encontrado");
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

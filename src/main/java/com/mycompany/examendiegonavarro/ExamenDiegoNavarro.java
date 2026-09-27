@@ -7,6 +7,7 @@ import Control.Control;
 import Modelo.Cliente;
 import Modelo.IModelo;
 import Modelo.Modelo;
+import Modelo.Tarjeta;
 import Vista.FrmBuscarCliente;
 
 /**
@@ -22,6 +23,9 @@ public class ExamenDiegoNavarro {
         ((Modelo) modelo).agregarCliente(new Cliente("Juan Pérez", "Calle Falsa 123", 123456L, 150.0));
         ((Modelo) modelo).agregarCliente(new Cliente("María López", "Av. Central 456", 789012L, 220.0));
         ((Modelo) modelo).agregarCliente(new Cliente("Diego Navarro", "Valle de alamos #2120", 3202123456L, 67.05));
+
+        ((Modelo) modelo).agregarTarjeta(new Tarjeta("123", "123"));
+        ((Modelo) modelo).agregarTarjeta(new Tarjeta("9876543210987654", "456"));
 
         FrmBuscarCliente vista = new FrmBuscarCliente(modelo, control);
         vista.setVisible(true);

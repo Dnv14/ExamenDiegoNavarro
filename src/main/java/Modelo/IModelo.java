@@ -17,7 +17,7 @@ public interface IModelo {
 
     public void buscarCliente(String numeroServicio);
 
-    public void buscarTarjeta(String numeroTarjeta, String cvv);
+    public boolean buscarTarjeta(String numeroTarjeta, String cvv);
 
     public void suscribir(ISubscriber sub);
 

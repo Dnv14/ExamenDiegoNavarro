@@ -30,6 +30,10 @@ public class Control {
         }
     }
 
+    public boolean validarTarjeta(String num, String cvv) {
+        return modelo.buscarTarjeta(num, cvv);
+    }
+
     public void pagarMonto() {
         modelo.pagarMonto();
     }

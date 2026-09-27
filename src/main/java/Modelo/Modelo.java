@@ -13,12 +13,14 @@ import java.util.LinkedList;
  */
 public class Modelo implements IModelo {
 
+    private LinkedList<Tarjeta> listaTarjetas;
     private LinkedList<Cliente> listaClientes;
     private Cliente clienteEncontrado;
     private LinkedList<ISubscriber> suscriptores;
 
     public Modelo() {
         this.listaClientes = new LinkedList<>();
+        this.listaTarjetas = new LinkedList<>();
         this.clienteEncontrado = null;
         this.suscriptores = new LinkedList<>();
     }
@@ -30,6 +32,10 @@ public class Modelo implements IModelo {
 
     public void agregarCliente(Cliente cliente) {
         this.listaClientes.add(cliente);
+    }
+
+    public void agregarTarjeta(Tarjeta tarjeta) {
+        this.listaTarjetas.add(tarjeta);
     }
 
     @Override
@@ -70,8 +76,12 @@ public class Modelo implements IModelo {
     }
 
     @Override
-    public void buscarTarjeta(String numeroTarjeta, String cvv) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public boolean buscarTarjeta(String numeroTarjeta, String cvv) {
+        for (Tarjeta t : listaTarjetas) {
+            if (t.getNumeroTarjeta().equals(numeroTarjeta) && t.getCvv().equals(cvv)) {
+                return true;
+            }
+        }
+        return false;
     }
-
 }
