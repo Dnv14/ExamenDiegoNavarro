@@ -4,26 +4,36 @@
  */
 package Vista;
 
+import Control.Control;
+import Modelo.Cliente;
+import Modelo.IModelo;
+import Modelo.Modelo;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.LinkedList;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Diego
  */
-public class FrmBuscarCliente extends javax.swing.JFrame {
+public class FrmBuscarCliente extends javax.swing.JFrame implements ISubscriber {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmBuscarCliente.class.getName());
 
-    /**
-     * Creates new form FrmBuscarCliente
-     */
-    public FrmBuscarCliente() {
+    private final Control control;
+
+    public FrmBuscarCliente(IModelo modelo, Control control) {
         initComponents();
+        this.control = control;
+        modelo.suscribir(this);
         this.setResizable(false);
         this.setTitle("Buscar Cliente");
+        this.setLocationRelativeTo(null);
         pintarTabla();
+        configurarTablaListener();
+        actualizarTabla(this.control.obtenerListaClientes());
     }
 
     /**
@@ -80,6 +90,11 @@ public class FrmBuscarCliente extends javax.swing.JFrame {
         busquedaTextField.setBackground(new java.awt.Color(255, 255, 255));
         busquedaTextField.setForeground(new java.awt.Color(0, 0, 0));
         busquedaTextField.addActionListener(this::busquedaTextFieldActionPerformed);
+        busquedaTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                busquedaTextFieldKeyReleased(evt);
+            }
+        });
 
         header.setBackground(new java.awt.Color(0, 104, 56));
 
@@ -232,8 +247,81 @@ public class FrmBuscarCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_busquedaTextFieldActionPerformed
 
     private void botonPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonPagarActionPerformed
-        
+        control.abrirVentanaPago();
     }//GEN-LAST:event_botonPagarActionPerformed
+
+    private void busquedaTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_busquedaTextFieldKeyReleased
+        busquedaTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                String textoBusqueda = busquedaTextField.getText().trim().toLowerCase();
+
+                LinkedList<Cliente> listaOriginal = control.obtenerListaClientes();
+                LinkedList<Cliente> listaFiltrada = new LinkedList<>();
+
+                for (Cliente c : listaOriginal) {
+
+                    if (c.getNombre().toLowerCase().contains(textoBusqueda)
+                            || String.valueOf(c.getNumeroServicio()).contains(textoBusqueda)) {
+                        listaFiltrada.add(c);
+                    }
+                }
+                actualizarTabla(listaFiltrada);
+            }
+        });
+    }//GEN-LAST:event_busquedaTextFieldKeyReleased
+
+    private void configurarTablaListener() {
+        tablaClientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int fila = tablaClientes.getSelectedRow();
+                if (fila != -1) {
+                    Object valor = tablaClientes.getValueAt(fila, 0);
+                    String numServicio = String.valueOf(valor);
+                    control.buscarCliente(numServicio);
+                }
+            }
+        });
+    }
+
+    public void actualizarTabla(LinkedList<Cliente> listaClientes) {
+        String[] columnas = {"Número de Servicio", "Nombre del Cliente"};
+        DefaultTableModel modeloTabla = new DefaultTableModel(columnas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        if (listaClientes != null) {
+            for (Cliente c : listaClientes) {
+                Object[] renglon = {
+                    c.getNumeroServicio(),
+                    c.getNombre()
+                };
+                modeloTabla.addRow(renglon);
+            }
+        }
+        tablaClientes.setModel(modeloTabla);
+        pintarTabla();
+    }
+
+    @Override
+    public void update(IModelo modeloActual) {
+
+        Cliente c = modeloActual.getClienteEncontrado();
+        if (c != null) {
+            labelDomicilio.setText("Domicilio: " + c.getDomicilio());
+            labelNumeroServicio.setText("Número de Servicio: " + c.getNumeroServicio());
+            labelNombreCliente.setText("Nombre del Cliente: " + c.getNombre());
+            labelTotalGasto.setText("kWh Gastados: " + c.getKwhGastados());
+            labelTotalPago.setText("Total a Pagar: " + c.getMontoPago() + "$");
+        } else {
+            labelDomicilio.setText("Domicilio: ");
+            labelNombreCliente.setText("Nombre del Cliente: No encontrado");
+        }
+    }
 
     public void pintarTabla() {
 
@@ -257,6 +345,7 @@ public class FrmBuscarCliente extends javax.swing.JFrame {
             tablaClientes.getColumnModel().getColumn(0).setCellRenderer(centrado);
         }
     }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonPagar;
     private javax.swing.JTextField busquedaTextField;

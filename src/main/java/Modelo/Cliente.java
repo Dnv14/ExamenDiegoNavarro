@@ -16,12 +16,12 @@ public class Cliente {
     private Double kwhGastados;
     private Double montoPago;
 
-    public Cliente(String nombre, String domicilio, Long numeroServicio, Double kwhGastados, Double montoPago) {
+    public Cliente(String nombre, String domicilio, Long numeroServicio, Double kwhGastados) {
         this.nombre = nombre;
         this.domicilio = domicilio;
         this.numeroServicio = numeroServicio;
         this.kwhGastados = kwhGastados;
-        this.montoPago = montoPago;
+        calcularMontoPago();
     }
 
     public String getNombre() {
@@ -62,6 +62,11 @@ public class Cliente {
 
     public void setMontoPago(Double montoPago) {
         this.montoPago = montoPago;
+    }
+
+    public void calcularMontoPago() {
+        double tarifaPorKwh = 2.5;
+        this.montoPago = this.kwhGastados * tarifaPorKwh;
     }
 
 }

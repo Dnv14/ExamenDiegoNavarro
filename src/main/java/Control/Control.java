@@ -4,21 +4,45 @@
  */
 package Control;
 
+import Modelo.Cliente;
+import Modelo.IModelo;
+import Vista.FrmPagoRecibo;
+import java.util.LinkedList;
+
 /**
  *
  * @author Diego
  */
 public class Control {
 
-    public void pagarMonto() {
+    private final IModelo modelo;
 
+    public Control(IModelo modelo) {
+        this.modelo = modelo;
     }
 
     public void buscarCliente(String numeroServicio) {
+        if (numeroServicio != null && !numeroServicio.trim().isEmpty()) {
+            modelo.buscarCliente(numeroServicio);
+        } else {
 
+            modelo.buscarCliente("");
+        }
     }
 
-    public void buscarTarjeta(String numeroTarjeta, String cvv) {
+    public void pagarMonto() {
+        modelo.pagarMonto();
+    }
 
+    public LinkedList<Cliente> obtenerListaClientes() {
+        return modelo.getListaClientes();
+    }
+
+    public void abrirVentanaPago() {
+        if (modelo.getClienteEncontrado() != null) {
+
+            FrmPagoRecibo ventanaPago = new FrmPagoRecibo(this, this.modelo);
+            ventanaPago.setVisible(true);
+        }
     }
 }

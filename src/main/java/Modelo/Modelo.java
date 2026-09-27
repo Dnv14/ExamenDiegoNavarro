@@ -23,6 +23,7 @@ public class Modelo implements IModelo {
         this.suscriptores = new LinkedList<>();
     }
 
+    @Override
     public Cliente getClienteEncontrado() {
         return this.clienteEncontrado;
     }
@@ -31,6 +32,12 @@ public class Modelo implements IModelo {
         this.listaClientes.add(cliente);
     }
 
+    @Override
+    public LinkedList<Cliente> getListaClientes() {
+        return this.listaClientes;
+    }
+
+    @Override
     public void suscribir(ISubscriber sub) {
         this.suscriptores.add(sub);
     }
@@ -43,14 +50,17 @@ public class Modelo implements IModelo {
 
     @Override
     public void pagarMonto() {
-
+        if (this.clienteEncontrado != null) {
+            this.clienteEncontrado.setMontoPago(0.0);
+            this.clienteEncontrado.setKwhGastados(0.0);
+            notificarSuscriptores();
+        }
     }
 
     @Override
     public void buscarCliente(String numeroServicio) {
         this.clienteEncontrado = null;
         for (Cliente c : listaClientes) {
-
             if (String.valueOf(c.getNumeroServicio()).equals(numeroServicio)) {
                 this.clienteEncontrado = c;
                 break;
@@ -61,7 +71,7 @@ public class Modelo implements IModelo {
 
     @Override
     public void buscarTarjeta(String numeroTarjeta, String cvv) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }

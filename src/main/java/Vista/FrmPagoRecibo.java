@@ -1,23 +1,33 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Vista;
+
+import Control.Control;
+import Modelo.IModelo;
 
 /**
  *
  * @author Diego
  */
-public class FrmPagoRecibo extends javax.swing.JDialog {
+public class FrmPagoRecibo extends javax.swing.JFrame implements ISubscriber {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmPagoRecibo.class.getName());
 
-    /**
-     * Creates new form FrmPagoRecibo
-     */
-    public FrmPagoRecibo(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    private final Control control;
+    private final IModelo modelo;
+
+    public FrmPagoRecibo(Control control, IModelo modelo) {
         initComponents();
+        this.control = control;
+        this.modelo = modelo;
+
+        this.modelo.suscribir(this);
+        this.setResizable(false);
+        this.setTitle("Pagar Recibo");
+        this.setLocationRelativeTo(null);
+
     }
 
     /**
@@ -44,7 +54,7 @@ public class FrmPagoRecibo extends javax.swing.JDialog {
         labelBuscarCliente1 = new javax.swing.JLabel();
         busquedaTextField1 = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -222,6 +232,10 @@ public class FrmPagoRecibo extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_busquedaTextField1ActionPerformed
 
+    @Override
+    public void update(IModelo modelo) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonPagar;
@@ -239,4 +253,5 @@ public class FrmPagoRecibo extends javax.swing.JDialog {
     private javax.swing.JLabel labelTotalPago;
     private javax.swing.JPanel panelInfoCliente;
     // End of variables declaration//GEN-END:variables
+
 }
